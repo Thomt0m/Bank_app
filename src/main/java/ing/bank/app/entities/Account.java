@@ -9,16 +9,16 @@ import java.util.UUID;
 @Table(name = "accounts")
 public class Account {
 
-    // TODO see if you can use an IBAN as id for Account
+    // TODO see if you can use an IBAN as id for the Account entity
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @JoinColumn(name = "ownerId")
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(optional = false)
     private User owner;
 
-    private BigDecimal balance = BigDecimal.valueOf(0, 10);
+    private BigDecimal balance = new BigDecimal(0);
 
 
 
@@ -30,6 +30,8 @@ public class Account {
 
     public BigDecimal getBalance() { return balance; }
     public void setBalance(BigDecimal balance) { this.balance = balance; }
-    public BigDecimal addBalance(BigDecimal value) { return this.balance.add(value); }
+    public void addBalance(BigDecimal value) {
+        balance = balance.add(value);
+    }
 
 }
