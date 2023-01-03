@@ -1,4 +1,4 @@
-package ing.bank.app.controllers;
+package ing.bank.app.controller;
 
 
 import ing.bank.app.entities.Account;
@@ -7,9 +7,7 @@ import ing.bank.app.repositories.AccountRepository;
 import ing.bank.app.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
@@ -18,7 +16,7 @@ import java.math.BigDecimal;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository userRepo;
 
     @Autowired
     private AccountRepository accountRepository;
@@ -28,12 +26,12 @@ public class UserController {
         return "Its alive!";
     }
 
-    @GetMapping(path="/test")
-    public @ResponseBody String test() {
+    @PostMapping(path="/Register")
+    public @ResponseBody String registerNewUser(@RequestBody String name) {
         User user = new User();
         user.setName("testUser");
         user.setEmail("testUser@email");
-        userRepository.save(user);
+        userRepo.save(user);
         return "new user created";
     }
 
@@ -42,7 +40,7 @@ public class UserController {
         User user = new User();
         user.setName("testUser");
         user.setEmail("testUser@email");
-        userRepository.save(user);
+        userRepo.save(user);
 
         Account account = new Account();
         account.setOwner(user);
@@ -52,10 +50,6 @@ public class UserController {
         return "new account created";
     }
 
-    @GetMapping(path="/AllUsers")
-    public @ResponseBody Iterable<User> getAll() { return userRepository.findAll(); }
 
-    @GetMapping(path="/AllAccounts")
-    public @ResponseBody Iterable<Account> getAllAccounts() { return accountRepository.findAll(); }
 
 }

@@ -46,7 +46,7 @@ public class Transaction {
     public void setReceivingAccountId(UUID receivingAccountId) { this.receivingAccountId = receivingAccountId; }
 
     public BigDecimal getAmount() { return amount; }
-    public void setAmount(BigDecimal amount) { this.amount = amount; }
+    public void setAmount(BigDecimal amount) { this.amount = amount.abs(); }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }

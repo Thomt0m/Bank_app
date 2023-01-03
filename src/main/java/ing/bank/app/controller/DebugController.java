@@ -1,4 +1,4 @@
-package ing.bank.app.controllers;
+package ing.bank.app.controller;
 
 
 import ing.bank.app.entities.Account;
@@ -14,26 +14,39 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-// A controller for debugging and testing purposes, not meant for 'production'
+/**
+ * A controller for debugging and testing purposes, not meant for 'production'
+ */
 @Controller
 @RequestMapping(path="/Test")
 public class DebugController {
 
     @Autowired
     UserRepository userRepo;
-
     @Autowired
     AccountRepository accountRepo;
-
     @Autowired
     TransactionRepository transactionRepo;
-
     @Autowired
     TransactionExecutor transactionExecutor;
+
+
+    @GetMapping(path="/GetAllUsers")
+    public @ResponseBody Iterable<User> getAll() { return userRepo.findAll(); }
+
+    @GetMapping(path="/GetAllAccounts")
+    public @ResponseBody Iterable<Account> getAllAccounts() { return accountRepo.findAll(); }
+
+    @GetMapping(path = "/GetAllTransactions")
+    public @ResponseBody Iterable<Transaction> getAllTransactions() { return transactionRepo.findAll(); }
+
+
+
+
+
 
 
 

@@ -1,10 +1,10 @@
 package ing.bank.app.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import ing.bank.app.models.NewUser;
 import jakarta.persistence.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -22,6 +22,12 @@ public class User {
     @JsonIgnore
     private final Set<Account> accounts = new HashSet<>();
 
+    private String passwordHash;
+
+    private String passwordHash2;
+
+
+
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -33,10 +39,36 @@ public class User {
     public void setEmail(String email) { this.email = email; }
 
     public Iterable<Account> getAccounts() { return accounts; }
+    public Optional<Account> getAccount(UUID accountId) { return accounts.stream().filter(x -> x.getId().equals(accountId)).findFirst(); }
     public boolean addAccount(Account account) {
         account.setOwner(this);
         return accounts.add(account);
     }
+
+    public String getPasswordHash() { return passwordHash; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+
+    public String getPasswordHash2() { return passwordHash2; }
+    public void setPasswordHash2(String passwordHash) { this.passwordHash2 = passwordHash; }
+
+
+
+
+    public User() {}
+
+    public User(String name, String email, String passwordHash){
+        this.name = name;
+        this.email = email;
+        this.passwordHash = passwordHash;
+    }
+
+    /*public User(NewUser newUser) {
+        this.name = newUser.Name;
+        this.email = newUser.Email;
+        this.passwordHash = newUser.Password.GetHash();
+    }*/
+
+
 
 
     @Override
