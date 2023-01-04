@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 /**
  * A controller for debugging and testing purposes, not meant for 'production'
@@ -46,7 +47,46 @@ public class DebugController {
 
 
 
+    @GetMapping("/DoUserTransaction")
+    public @ResponseBody Iterable<String> doUserTransaction() {
+        ArrayList<String> response = new ArrayList<>();
 
+        // Create users
+        User user1 = new User()
+                .setName("testUser1")
+                .setEmail("testUser1@email.com");
+        Account account1 = new Account();
+        account1.addBalance(new BigDecimal(1000));
+        user1.addAccount(account1);
+        userRepo.save(user1);
+
+        User user2 = new User()
+                .setName("testUser2")
+                .setEmail("testUser2@email.com");
+        Account account2 = new Account();
+        user2.addAccount(account2);
+        userRepo.save(user2);
+
+        // Log the initial state of the accounts
+        response.add(String.format("INITIAL -- account1 = %f, account2 = %f", account1.getBalance(), account2.getBalance()));
+
+        // Create the transaction
+        Transaction transaction = new Transaction()
+                .setCreationDate(LocalDateTime.now())
+                .setCreator("Debugging")
+                .setDescription("Testing transaction execution")
+                .setSendingAccountId(account1.getId())
+                .setReceivingAccountId(account2.getId())
+                .setAmount(new BigDecimal(100));
+
+        // Do the transaction
+        transactionExecutor.executeTransaction(transaction);
+
+        // Log the resulting state of the accounts
+        response.add(String.format("RESULT  -- account1 = %f, account2 = %f", account1.getBalance(), account2.getBalance()));
+
+        return response;
+    }
 
 
 

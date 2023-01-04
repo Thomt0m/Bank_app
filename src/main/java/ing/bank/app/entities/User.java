@@ -30,13 +30,22 @@ public class User {
 
 
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public User setId(Long id) {
+        this.id = id;
+        return this;
+    }
 
     public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public User setName(String name) {
+        this.name = name;
+        return this;
+    }
 
     public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public User setEmail(String email) {
+        this.email = email;
+        return this;
+    }
 
     public Iterable<Account> getAccounts() { return accounts; }
     public Optional<Account> getAccount(UUID accountId) { return accounts.stream().filter(x -> x.getId().equals(accountId)).findFirst(); }
@@ -46,10 +55,16 @@ public class User {
     }
 
     public String getPasswordHash() { return passwordHash; }
-    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
+    public User setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+        return this;
+    }
 
     public String getPasswordHash2() { return passwordHash2; }
-    public void setPasswordHash2(String passwordHash) { this.passwordHash2 = passwordHash; }
+    public User setPasswordHash2(String passwordHash) {
+        this.passwordHash2 = passwordHash;
+        return this;
+    }
 
 
 

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -34,26 +33,26 @@ public class Transaction {
 
 
     public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
+    public Transaction setId(UUID id) { this.id = id; return this; }
 
     public String getCreator() { return creator; }
-    public void setCreator(String creator) { this.creator = creator; }
+    public Transaction setCreator(String creator) { this.creator = creator; return this; }
 
     public UUID getSendingAccountId() { return sendingAccountId; }
-    public void setSendingAccountId(UUID sendingAccountId) { this.sendingAccountId = sendingAccountId; }
+    public Transaction setSendingAccountId(UUID sendingAccountId) { this.sendingAccountId = sendingAccountId; return this; }
 
     public UUID getReceivingAccountId() { return receivingAccountId; }
-    public void setReceivingAccountId(UUID receivingAccountId) { this.receivingAccountId = receivingAccountId; }
+    public Transaction setReceivingAccountId(UUID receivingAccountId) { this.receivingAccountId = receivingAccountId; return this; }
 
     public BigDecimal getAmount() { return amount; }
-    public void setAmount(BigDecimal amount) { this.amount = amount.abs(); }
+    public Transaction setAmount(BigDecimal amount) { this.amount = amount.abs(); return this; }
 
     public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public Transaction setDescription(String description) { this.description = description; return this; }
 
     public LocalDateTime getCreationDate() { return creationDate; }
-    public void setCreationDate(LocalDateTime creationDate) { this.creationDate = creationDate; }
+    public Transaction setCreationDate(LocalDateTime creationDate) { this.creationDate = creationDate; return this; }
 
     public LocalDateTime getExecutionDate() { return executionDate; }
-    public void setExecutionDate(LocalDateTime executionDate) { this.executionDate = executionDate; }
+    public Transaction setExecutionDate(LocalDateTime executionDate) { this.executionDate = executionDate; return this; }
 }
