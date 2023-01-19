@@ -37,8 +37,8 @@ public class TransactionExecutor {
         Optional<Account> receiverOpt = accountRepo.findById(transaction.getReceivingAccountId());
 
         // If both parties are not in the DB, the transaction changes/affects nothing and there's nothing to execute.
-        // However, the creator might have expected it would have an effect, but have provided the wrong account Ids,
-        // so something is logged, at least for now.
+        // However, the creator might have assumed that it would have an effect, but have provided the wrong account Ids,
+        // so a message is printed to notify the creator of this, at least for now.
         if (senderOpt.isEmpty() && receiverOpt.isEmpty()) {
             System.out.printf(
                     "Unable to find any parties of the transaction in the database, senderId: %s, receiverId: %s.",

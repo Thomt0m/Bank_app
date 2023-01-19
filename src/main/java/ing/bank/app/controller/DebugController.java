@@ -2,13 +2,14 @@ package ing.bank.app.controller;
 
 
 import ing.bank.app.entities.Account;
-import ing.bank.app.entities.Transaction;
 import ing.bank.app.entities.User;
+import ing.bank.app.entities.Transaction;
 import ing.bank.app.repositories.AccountRepository;
 import ing.bank.app.repositories.TransactionRepository;
 import ing.bank.app.repositories.UserRepository;
 import ing.bank.app.services.TransactionExecutor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,8 @@ import java.util.ArrayList;
 @RequestMapping(path="/Test")
 public class DebugController {
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
     @Autowired
     UserRepository userRepo;
     @Autowired
@@ -45,24 +48,31 @@ public class DebugController {
     public @ResponseBody Iterable<Transaction> getAllTransactions() { return transactionRepo.findAll(); }
 
 
-
-
+    /**
+     * Demo showing how to execute a transaction, starting with nothing and creating everything that's required.
+     * To verify the persistence of the {@link User}(s), {@link Account}(s) and the {@link Transaction}, check the database.
+     * @return A collection of strings showing the states of the accounts before and after the transaction
+     */
     @GetMapping("/DoUserTransaction")
     public @ResponseBody Iterable<String> doUserTransaction() {
         ArrayList<String> response = new ArrayList<>();
 
         // Create users
-        User user1 = new User()
-                .setName("testUser1")
-                .setEmail("testUser1@email.com");
+        User user1 = new User(
+                "testUser1",
+                "testUser1@email.com",
+                passwordEncoder.encode("password1")
+        );
         Account account1 = new Account();
         account1.addBalance(new BigDecimal(1000));
         user1.addAccount(account1);
         userRepo.save(user1);
 
-        User user2 = new User()
-                .setName("testUser2")
-                .setEmail("testUser2@email.com");
+        User user2 = new User(
+                "testUser2",
+                "testUser2@email.com",
+                passwordEncoder.encode("password2")
+        );
         Account account2 = new Account();
         user2.addAccount(account2);
         userRepo.save(user2);
@@ -89,15 +99,19 @@ public class DebugController {
     }
 
 
-
-
-
+    /**
+     * Demo showing how to create {@link User}(s) and {@link Account}(s).
+     * To verify the persistence of the newly created entities, check the database
+     * @return a success message
+     */
     @GetMapping("/createEntities")
     public @ResponseBody String createEntities(){
         if (!userRepo.existsById(1L)){
-            User user1 = new User();
-            user1.setName("testUser1");
-            user1.setEmail("testUser1@email.com");
+            User user1 = new User(
+                    "testUser1",
+                    "testUser1@email.com",
+                    passwordEncoder.encode("password1")
+            );
 
             Account account1 = new Account();
             account1.addBalance(new BigDecimal(1234));
@@ -108,9 +122,11 @@ public class DebugController {
         }
 
         if (!userRepo.existsById(2L)){
-            User user2 = new User();
-            user2.setName("testUser2");
-            user2.setEmail("testUser2@email.com");
+            User user2 = new User(
+                    "testUser2",
+                    "testUser2@email.com",
+                    passwordEncoder.encode("password2")
+            );
 
             Account account2 = new Account();
             user2.addAccount(account2);
@@ -120,7 +136,6 @@ public class DebugController {
 
         return "Test users and account created";
     }
-
 
 
     @GetMapping("/tryTransaction")
