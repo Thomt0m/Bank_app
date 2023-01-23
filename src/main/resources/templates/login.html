@@ -14,12 +14,15 @@
       You have been logged out.
     </div>
 
-    <div>(test) User Name = testUser@email.com</div>
-    <div>(test) Password = password</div>
+    <div>User Name = testUser@email.com</div>
+    <div>Password  = password</div>
+    <div>Password2 = password2</div>
     <div>(defined in AppSecurityConfig.java)</div>
+    <div> </div>
     <form th:action="@{/login}" method="post">
-      <div><label> User Name: <input type="text" name="username"/> </label></div>
-      <div><label> Password: <input type="password" name="password"/> </label></div>
+      <div><label> User Name: <input type="text" name="username" value="testUser@email.com"/> </label></div>
+      <div><label> Password: <input type="password" name="password" value="password"/> </label></div>
+        <div><label> Password2: <input type="password" name="password2" value="password2"/> </label></div>
       <div><input type="submit" value="Sign in"/></div>
     </form>
 

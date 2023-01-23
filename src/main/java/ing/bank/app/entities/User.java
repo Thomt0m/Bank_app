@@ -49,10 +49,10 @@ public class User implements UserDetails, CredentialsContainer {
     public void setEmail(String email) { this.email = email; }
 
     public String getPassword() { return this.password; }
-    public void setPassword(String passwordHashed) { this.password = passwordHashed; }
+    public void setPassword(String password) { this.password = password; }
 
-    public String getPassword2() { return password2; }
-    public void setPassword2(String password2Hashed) { this.password2 = password2Hashed; }
+    public String getPassword2() { return this.password2; }
+    public void setPassword2(String password2) { this.password2 = password2; }
 
     public Boolean getEnabled() { return enabled; }
     public void setEnabled(Boolean enabled) { this.enabled = enabled; }
@@ -211,9 +211,13 @@ public class User implements UserDetails, CredentialsContainer {
      */
     public static final class UserBuilder {
 
+        private String fullName;
+
         private String email;
 
         private String password;
+
+        private String password2;
 
         private List<GrantedAuthority> authorities;
 
@@ -224,6 +228,18 @@ public class User implements UserDetails, CredentialsContainer {
 
         private UserBuilder() {}
 
+
+        /**
+         * Populates the full name. This attribute is required.
+         * @param fullName the full name. Cannot be null.
+         * @return the {@link UserBuilder} for method chaining (i.e. to populate
+         * additional attributes for this User)
+         */
+        public UserBuilder fullName(String fullName) {
+            Assert.notNull(fullName, "fullName cannot be null");
+            this.fullName = fullName;
+            return this;
+        }
 
         /**
          * Populates the email. This attribute is required.
@@ -244,8 +260,14 @@ public class User implements UserDetails, CredentialsContainer {
          * additional attributes for this User)
          */
         public UserBuilder password(String password) {
-            Assert.notNull(password, "password cannot be null");
+            Assert.hasText(password, "password cannot be null and must contain text");
             this.password = password;
+            return this;
+        }
+
+        public UserBuilder password2(String password2) {
+            Assert.hasText(password2, "password2 cannot be null and must contain text");
+            this.password2 = password2;
             return this;
         }
 
@@ -342,9 +364,12 @@ public class User implements UserDetails, CredentialsContainer {
             return this;
         }
 
-        public UserDetails build() {
+        public User build() {
             String encodedPassword = passwordEncoder.apply(password);
-            return new User(email, encodedPassword, enabled, authorities);
+            User newUser = new User(email, encodedPassword, enabled, authorities);
+            newUser.setFullName(fullName);
+            newUser.setPassword2(password2);
+            return newUser;
         }
 
     }

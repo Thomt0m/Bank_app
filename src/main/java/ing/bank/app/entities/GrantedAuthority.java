@@ -1,5 +1,7 @@
 package ing.bank.app.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import org.springframework.util.Assert;
 
 /**
@@ -15,15 +17,23 @@ public class GrantedAuthority implements org.springframework.security.core.Grant
 
     private String role;
 
+    public GrantedAuthority() {}
+
     public GrantedAuthority(String role) {
         Assert.hasText(role, "A textual representation of the granted authority is required");
-        this.role = role.toUpperCase();
+        setAuthority(role);
     }
 
     @Override
     public String getAuthority() {
         return this.role;
     }
+
+    public void setAuthority(String role) {
+        Assert.hasText(role, "A textual representation of the granted authority is required");
+        this.role = role.toUpperCase();
+    }
+
 
     @Override
     public boolean equals(Object obj) {

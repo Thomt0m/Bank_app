@@ -12,4 +12,12 @@ public class PasswordService {
 
     @Bean
     public PasswordEncoder getPasswordEncoder() { return passwordEncoder; }
+
+    public String encode(CharSequence password) {
+        return passwordEncoder.encode(password);
+    }
+
+    public boolean matches(CharSequence password, String encodedPassword) {
+        return passwordEncoder.matches(password, encodedPassword);
+    }
 }

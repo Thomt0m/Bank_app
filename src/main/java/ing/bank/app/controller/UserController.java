@@ -1,63 +1,34 @@
 package ing.bank.app.controller;
 
 
-import ing.bank.app.entities.Account;
 import ing.bank.app.entities.User;
+import ing.bank.app.models.NewUser;
 import ing.bank.app.repositories.AccountRepository;
 import ing.bank.app.repositories.UserRepository;
+import ing.bank.app.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 
 @Controller
 @RequestMapping(path="/Users")
 public class UserController {
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private UserRepository userRepo;
 
     @Autowired
-    private UserRepository userRepo;
+    private UserService userService;
 
     @Autowired
     private AccountRepository accountRepository;
 
-    @GetMapping
-    public @ResponseBody String getAlive(){
-        return "Its alive!";
-    }
 
     @PostMapping(path="/Register")
-    public @ResponseBody String registerNewUser(@RequestBody String name) {
-        User user = new User(
-                "testUser",
-                "testUser@email.com",
-                passwordEncoder.encode("password")
-        );
-        userRepo.save(user);
-        return "new user created";
+    public @ResponseBody String registerNewUser(@RequestBody NewUser newUser) {
+        User user = userService.registerNewUser(newUser);
+        return String.format("new user '%s' created", user.getUsername());
     }
-
-    @GetMapping(path="/testAccount")
-    public @ResponseBody String testAccount() {
-        User user = new User(
-                "testUser",
-                "testUser@email.com",
-                passwordEncoder.encode("password")
-        );
-        userRepo.save(user);
-
-        Account account = new Account();
-        account.setOwner(user);
-        account.addBalance(BigDecimal.valueOf(10));
-        accountRepository.save(account);
-
-        return "new account created";
-    }
-
-
 
 }
